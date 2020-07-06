@@ -7,6 +7,7 @@ spring:
         encrypt:
           enabled: false
         git:
-          uri: "https://github.com/greenn-lab/spring-msa-john-carnell/chapter03/"
+          uri: "https://github.com/greenn-lab/spring-msa-john-carnell"
+          search-paths: "chapter03/src/main/resources/config/licensingservice"
 #        native:
 #          search-locations: "/Users/green/workspace/java/spring/msa-john-carnell/chapter03/src/main/resources/config/licensingservice"
