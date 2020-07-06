@@ -4,12 +4,24 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "licenses")
 @Getter
-@Setter
 @Builder
-public class License{
-  private String id;
+public class License {
+  
+  @Id
+  @Setter
+  private String licenseId;
+  
   private String organizationId;
   private String productName;
-  private String licenseType;
+  
+  @Setter
+  private String comment;
+  
 }

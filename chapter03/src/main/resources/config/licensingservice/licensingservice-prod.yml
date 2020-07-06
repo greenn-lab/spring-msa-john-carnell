@@ -1,0 +1,14 @@
+example.property: "I AM THE PRODUCTION"
+
+spring:
+  datasource:
+    driverClassName: "org.h2.Driver"
+    url: "jdbc:h2:mem:confsvr"
+    username: "sa"
+    password: ""
+    testWhileIdle: true
+    validationQuery: "SELECT 1"
+  jpa:
+    show-sql: true
+    properties:
+      hibernate.dialect: "org.hibernate.dialect.H2Dialect"

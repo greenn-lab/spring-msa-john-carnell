@@ -14,7 +14,6 @@
   <name>chapter02</name>
   <description>Eagle-Eye Licensing Server</description>
 
-
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -26,6 +25,15 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-config-client</artifactId>
+      <version>2.2.3.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
       <exclusions>
@@ -34,6 +42,12 @@
           <artifactId>junit-vintage-engine</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <!-- 책에선 Postgres 를 썼지만, 그냥 가볍게 구성하고 싶어서... -->
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
     </dependency>
 
     <dependency>

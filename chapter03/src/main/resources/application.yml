@@ -1,0 +1,12 @@
+server.port: 8888 # 스프링 클라우드 컨피그 서버가 수신 대기하는 포트
+
+spring:
+  cloud:
+    config:
+      server:
+        encrypt:
+          enabled: false
+        git:
+          uri: "https://github.com/greenn-lab/spring-msa-john-carnell/chapter03/"
+#        native:
+#          search-locations: "/Users/green/workspace/java/spring/msa-john-carnell/chapter03/src/main/resources/config/licensingservice"

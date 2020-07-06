@@ -26,10 +26,9 @@ public class LicenseServiceController {
     
     //return licenseService.getLicense(licenseId);
     return License.builder()
-        .id(licenseId)
+        .licenseId(licenseId)
         .organizationId(organizationId)
         .productName("Teleco")
-        .licenseType("Seat")
         .build();
   }
   
@@ -48,5 +47,5 @@ public class LicenseServiceController {
   public String deleteLicenses(@PathVariable("licenseId") String licenseId) {
     return String.format("This is the Delete");
   }
-
+  
 }
