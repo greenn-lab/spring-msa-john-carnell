@@ -1,5 +1,5 @@
 example.property: "I AM THE PRODUCTION"
-crypted.value: "{cipher}b5d40e78e6a15e7c2a058b96f47ff1978335cc29c12886423334bcf0c90970e8ab914657c6ccf04c0c494d45a9b4b23f"
+crypted.value: "hello"
 
 spring:
   datasource:

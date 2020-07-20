@@ -25,13 +25,13 @@ public class LicenseService {
   private final OrganizationFeignClient organizationFeignClient;
   
   private final OrganizationRestTemplateClient organizationRestTemplateClient;
-
-
+  
+  
   public License getLicense(String organizationId, String licenseId, String clientType) {
     final License license = repository.findByOrganizationIdAndLicenseId(organizationId, licenseId);
     
     Organization organization = retrieveOrganization(organizationId, clientType);
-
+    
     license.setComment(config.getExampleProperty());
     
     license.setOrganizationName(organization.getName());
@@ -41,25 +41,25 @@ public class LicenseService {
     return license;
   }
   
-  private Organization retrieveOrganization(String organizationId, String clientType){
-      Organization organization = null;
-
-      switch (clientType) {
-          case "feign":
-              System.out.println("I am using the feign client");
-              organization = organizationFeignClient.getOrganization(organizationId);
-              break;
-          case "discovery":
-              System.out.println("I am using the discovery client");
-              organization = organizationDiscoveryClient.getOrganization(organizationId);
-              break;
-        case "rest":
-        default:
-            System.out.println("I am using the rest client");
-              organization = organizationRestTemplateClient.getOrganization(organizationId);
-      }
-
-      return organization;
+  private Organization retrieveOrganization(String organizationId, String clientType) {
+    Organization organization = null;
+    
+    switch (clientType) {
+      case "feign":
+        System.out.println("I am using the feign client");
+        organization = organizationFeignClient.getOrganization(organizationId);
+        break;
+      case "discovery":
+        System.out.println("I am using the discovery client");
+        organization = organizationDiscoveryClient.getOrganization(organizationId);
+        break;
+      case "rest":
+      default:
+        System.out.println("I am using the rest client");
+        organization = organizationRestTemplateClient.getOrganization(organizationId);
+    }
+    
+    return organization;
   }
   
   public void saveLicense(License license) {

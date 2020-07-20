@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
+@Getter
 public class ServiceConfig {
   
   @Value("${example.property:Hello}")
-  @Getter
   private String exampleProperty;
 
 }
