@@ -14,31 +14,24 @@ import org.springframework.web.bind.annotation.RestController;
 import study.spring.springmsajohncarnell.chapter02.model.License;
 import study.spring.springmsajohncarnell.chapter02.services.LicenseService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "v1/organizations/{organizationId}/licenses")
 @RequiredArgsConstructor
 public class LicenseServiceController {
   
   private final LicenseService licenseService;
-  
-  @RequestMapping(value = "/{licenseId}", method = RequestMethod.GET)
+
+  @GetMapping
+  public List<License> getLicenses(@PathVariable("organizationId") String organizationId) {
+    return licenseService.getLicensesByOrg(organizationId);
+  }
+
+  @GetMapping("{licenseId}")
   public License getLicenses(@PathVariable("organizationId") String organizationId,
                              @PathVariable("licenseId") String licenseId) {
-    
-    return License.builder()
-        .licenseId(licenseId)
-        .organizationId(organizationId)
-        .productName("Teleco")
-        .build();
-  }
-  
-  @GetMapping("/{licenseId}/{clientType}")
-  public License getLicensesWithClient(
-      @PathVariable String organizationId,
-      @PathVariable String licenseId,
-      @PathVariable String clientType
-  ) {
-    return licenseService.getLicense(organizationId, licenseId, clientType);
+    return licenseService.getLicense(organizationId, licenseId);
   }
   
   @PutMapping("{licenseId}")

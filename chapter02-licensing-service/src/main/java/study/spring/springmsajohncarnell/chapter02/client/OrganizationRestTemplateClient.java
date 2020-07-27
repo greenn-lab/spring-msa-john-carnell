@@ -1,5 +1,6 @@
 package study.spring.springmsajohncarnell.chapter02.client;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

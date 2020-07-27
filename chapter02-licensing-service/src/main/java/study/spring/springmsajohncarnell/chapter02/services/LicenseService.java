@@ -1,36 +1,37 @@
 package study.spring.springmsajohncarnell.chapter02.services;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import study.spring.springmsajohncarnell.chapter02.client.OrganizationDiscoveryClient;
-import study.spring.springmsajohncarnell.chapter02.client.OrganizationFeignClient;
 import study.spring.springmsajohncarnell.chapter02.client.OrganizationRestTemplateClient;
 import study.spring.springmsajohncarnell.chapter02.config.ServiceConfig;
 import study.spring.springmsajohncarnell.chapter02.model.License;
 import study.spring.springmsajohncarnell.chapter02.model.Organization;
 import study.spring.springmsajohncarnell.chapter02.repository.LicenseRepository;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class LicenseService {
   
   private final LicenseRepository repository;
   
   private final ServiceConfig config;
   
-  private final OrganizationDiscoveryClient organizationDiscoveryClient;
-  
-  private final OrganizationFeignClient organizationFeignClient;
-  
   private final OrganizationRestTemplateClient organizationRestTemplateClient;
   
   
-  public License getLicense(String organizationId, String licenseId, String clientType) {
+  public License getLicense(String organizationId, String licenseId) {
     final License license = repository.findByOrganizationIdAndLicenseId(organizationId, licenseId);
     
-    Organization organization = retrieveOrganization(organizationId, clientType);
+    Organization organization = getOrganization(organizationId);
     
     license.setComment(config.getExampleProperty());
     
@@ -41,25 +42,46 @@ public class LicenseService {
     return license;
   }
   
-  private Organization retrieveOrganization(String organizationId, String clientType) {
-    Organization organization = null;
+  @HystrixCommand
+  private Organization getOrganization(String organizationId) {
+    return organizationRestTemplateClient.getOrganization(organizationId);
+  }
+  
+  //  @HystrixCommand(
+  //      commandProperties = {
+  //          @HystrixProperty(
+  //              name = "execution.isolation.thread.timeoutInMillseconds",
+  //              value = "5000"
+  //          )
+  //      }
+  //  )
+  @HystrixCommand(
+      threadPoolKey = "licenseByOrgThreadPool",
+      threadPoolProperties = {
+        @HystrixProperty(name = "coreSize", value = "30"),
+        @HystrixProperty(name = "maxQueueSize", value = "10")
+      }
+  )
+  public List<License> getLicensesByOrg(String organizationId) {
     
-    switch (clientType) {
-      case "feign":
-        System.out.println("I am using the feign client");
-        organization = organizationFeignClient.getOrganization(organizationId);
-        break;
-      case "discovery":
-        System.out.println("I am using the discovery client");
-        organization = organizationDiscoveryClient.getOrganization(organizationId);
-        break;
-      case "rest":
-      default:
-        System.out.println("I am using the rest client");
-        organization = organizationRestTemplateClient.getOrganization(organizationId);
+    final int count = ThreadLocalRandom.current().nextInt(3) + 1;
+    
+    log.info("random count: {}", count);
+    
+    
+    final Organization organization = getOrganization(organizationId);
+    
+    
+    if (3 == count) {
+      try {
+        TimeUnit.SECONDS.sleep(11);
+      }
+      catch (InterruptedException e) {
+        log.error(e.getMessage());
+      }
     }
     
-    return organization;
+    return repository.findByOrganizationId(organizationId);
   }
   
   public void saveLicense(License license) {
