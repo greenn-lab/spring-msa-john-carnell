@@ -5,12 +5,3 @@ spring:
     active: default
 
 server.port: 8081
-
-eureka:
-  instance:
-    prefer-ip-address: true # 서비스 이름대신 서비스 IP 등록
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: "http://localhost:8761/eureka"
