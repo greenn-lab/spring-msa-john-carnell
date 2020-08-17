@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        output: # 이게 채널 이름이라네요.
+          destination: "orgChangeTopic"
+          content-type: "application/json"
+      kafka:
+        binder:
+          brokers: "localhost"
+          zk-nodes: "localhost"
+
